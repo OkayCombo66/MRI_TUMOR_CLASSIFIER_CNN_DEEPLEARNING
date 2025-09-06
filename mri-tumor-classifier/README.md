@@ -1,7 +1,7 @@
 
 # MRI Brain Tumor (Binary) — PyTorch
 
-This repo trains a simple CNN to classify MRI brain images as **tumor** vs **no tumor**.
+This repo trains a  CNN to classify MRI brain images as **tumor** vs **no tumor**.
 
 ## Quickstart
 
