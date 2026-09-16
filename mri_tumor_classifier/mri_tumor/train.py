@@ -20,6 +20,7 @@ def train_loop(
     patience=20,
     ckpt_path="checkpoints/best_model.pt",
     plot=True,
+    plot_path="reports/loss_curve.png",
 ):
     model = model.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=wd)
@@ -97,8 +98,8 @@ def train_loop(
         plt.title("Training vs. validation loss")
         plt.grid(True)
         plt.legend()
-        os.makedirs("reports", exist_ok=True)
-        plt.savefig("reports/loss_curve.png")
+        os.makedirs(os.path.dirname(plot_path) or ".", exist_ok=True)
+        plt.savefig(plot_path)
         plt.close()
 
     return hist_train, hist_val, model
