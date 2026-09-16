@@ -9,6 +9,7 @@ Detection" dataset (Navoneel Chakrabarty, Kaggle).
 """
 
 import glob
+import os
 
 import cv2
 import numpy as np
@@ -35,12 +36,12 @@ class MRIDataset(Dataset):
 
         tumor, healthy = [], []
 
-        for f in sorted(glob.iglob(f"{root}yes/*.jpg")):
+        for f in sorted(glob.iglob(os.path.join(root, "yes", "*.jpg"))):
             img = _read_and_resize(f)
             if img is not None:
                 tumor.append(img)
 
-        for f in sorted(glob.iglob(f"{root}no/*.jpg")):
+        for f in sorted(glob.iglob(os.path.join(root, "no", "*.jpg"))):
             img = _read_and_resize(f)
             if img is not None:
                 healthy.append(img)
