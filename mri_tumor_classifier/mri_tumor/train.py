@@ -79,6 +79,13 @@ def train_loop(
 
     print(f"Best epoch: {best_epoch}  (val loss {best_val:.6f})  -> saved to {ckpt_path}")
 
+    # Training ends on the last epoch's weights, which are not the best ones.
+    # Restore the checkpoint so the returned model matches what was saved.
+    if best_epoch > 0:
+        ckpt = torch.load(ckpt_path, map_location=device)
+        model.load_state_dict(ckpt["model"])
+        print(f"Restored best weights from epoch {best_epoch}.")
+
     if plot:
         import matplotlib.pyplot as plt
 
