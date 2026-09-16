@@ -47,7 +47,11 @@ def main(config_path):
         pretrained=cfg["model"].get("pretrained", True),
     )
 
-    train_loop(
+    run_name = cfg["model"]["name"]
+    plot_path = cfg["train"].get("plot_path", f"reports/loss_curve_{run_name}.png")
+    cm_path = cfg["train"].get("cm_path", f"reports/confusion_matrix_{run_name}.png")
+
+    hist_train, hist_val, model = train_loop(
         model,
         train_loader,
         val_loader,
@@ -57,10 +61,20 @@ def main(config_path):
         wd=cfg["train"]["weight_decay"],
         patience=cfg["train"]["patience"],
         ckpt_path=cfg["train"]["ckpt_path"],
+        plot_path=plot_path,
     )
 
+    # Per-epoch history, so the loss curves can be inspected outside the plot.
+    hist_csv = f"reports/history_{run_name}.csv"
+    Path(hist_csv).parent.mkdir(parents=True, exist_ok=True)
+    with open(hist_csv, "w") as f:
+        f.write("epoch,train_loss,val_loss\n")
+        for i, (t, v) in enumerate(zip(hist_train, hist_val), 1):
+            f.write(f"{i},{t:.6f},{v:.6f}\n")
+    print(f"Wrote {hist_csv}")
+
     print("\nEvaluating on the held-out test set:")
-    evaluate_model(model, test_loader, device=device, threshold_fn=threshold)
+    evaluate_model(model, test_loader, device=device, threshold_fn=threshold, cm_path=cm_path)
 
 
 if __name__ == "__main__":
