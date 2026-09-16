@@ -1,0 +1,19 @@
+seed: 42
+device: "cpu"              # "cpu" or "cuda"
+
+data:
+  root: "data/brain_tumor_dataset"   # expects <root>/yes/*.jpg and <root>/no/*.jpg
+  img_size: 128
+
+train:
+  batch_size: 32
+  epochs: 70
+  lr: 0.0001
+  weight_decay: 0.0001
+  patience: 8               # early-stopping patience, in epochs
+  ckpt_path: "checkpoints/best_resnet18.pt"
+
+model:
+  name: "resnet18"          # ImageNet-pretrained ResNet-18 baseline
+  in_channels: 3
+  pretrained: true           # only used when model.name == "resnet18"
